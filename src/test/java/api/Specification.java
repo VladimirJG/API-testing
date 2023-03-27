@@ -20,6 +20,11 @@ public class Specification {
                 .expectStatusCode(200)
                 .build();
     }
+    public static ResponseSpecification respSpecError400(){
+        return new ResponseSpecBuilder()
+                .expectStatusCode(400)
+                .build();
+    }
     public static void installSpecification(RequestSpecification req,ResponseSpecification resp){
         RestAssured.requestSpecification = req;
         RestAssured.responseSpecification = resp;

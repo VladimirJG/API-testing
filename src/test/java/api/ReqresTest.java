@@ -1,6 +1,5 @@
 package api;
 
-import io.restassured.http.ContentType;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -53,7 +52,7 @@ public class ReqresTest {
         Specification.installSpecification(Specification.reqSpec(URL), Specification.respSpec200OK());
         List<UserData> allUsers = given()
                 .when()
-                .get( "api/users")
+                .get("api/users")
                 .then().log().all()
                 .extract().body().jsonPath().getList("data", UserData.class);
         Assert.assertTrue(allUsers.stream().allMatch(u -> u.getEmail().endsWith("@reqres.in")));
@@ -74,5 +73,22 @@ public class ReqresTest {
         for (int i = 0; i < avatars.size(); i++) {
             Assert.assertTrue(avatars.get(i).contains(ids.get(i)));
         }
+    }
+
+    @Test
+    public void successRegTest() {
+        Specification.installSpecification(Specification.reqSpec(URL), Specification.respSpec200OK());
+        Integer id = 4;
+        String token = "QpwL5tke4Pnpja7X4";
+        Register user = new Register("eve.holt@reqres.in", "pistol");
+        SuccessReg successReg = given()
+                .body(user)
+                .when()
+                .post("api/register")
+                .then().log().all()
+                .extract().as(SuccessReg.class);
+
+        Assert.assertEquals(id, successReg.getId());
+        Assert.assertEquals(token, successReg.getToken());
     }
 }
