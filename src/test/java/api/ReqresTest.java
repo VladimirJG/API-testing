@@ -47,4 +47,15 @@ public class ReqresTest {
         allUsers.forEach(u -> Assert.assertTrue(u.getAvatar().contains(u.getId().toString())));
 
     }
+
+    @Test
+    public void emailEndWith() {
+        List<UserData> allUsers = given()
+                .when()
+                .contentType(ContentType.JSON)
+                .get(URL + "api/users")
+                .then().log().all()
+                .extract().body().jsonPath().getList("data", UserData.class);
+        Assert.assertTrue(allUsers.stream().allMatch(u->u.getEmail().endsWith("@reqres.in")));
+    }
 }
