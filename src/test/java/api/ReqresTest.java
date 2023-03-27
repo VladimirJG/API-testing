@@ -26,10 +26,10 @@ public class ReqresTest {
 
     @Test
     public void getAllAvatar() {
+        Specification.installSpecification(Specification.reqSpec(URL), Specification.respSpec200OK());
         List<UserData> allUsers = given()
                 .when()
-                .contentType(ContentType.JSON)
-                .get(URL + "api/users")
+                .get("api/users")
                 .then().log().all()
                 .extract().body().jsonPath().getList("data", UserData.class);
         list.addAll(allUsers.stream().map(UserData::getAvatar).toList());
@@ -38,10 +38,10 @@ public class ReqresTest {
 
     @Test
     public void checkIdUsers() {
+        Specification.installSpecification(Specification.reqSpec(URL), Specification.respSpec200OK());
         List<UserData> allUsers = given()
                 .when()
-                .contentType(ContentType.JSON)
-                .get(URL + "api/users")
+                .get("api/users")
                 .then().log().all()
                 .extract().body().jsonPath().getList("data", UserData.class);
         allUsers.forEach(u -> Assert.assertTrue(u.getAvatar().contains(u.getId().toString())));
@@ -50,10 +50,10 @@ public class ReqresTest {
 
     @Test
     public void emailEndWith() {
+        Specification.installSpecification(Specification.reqSpec(URL), Specification.respSpec200OK());
         List<UserData> allUsers = given()
                 .when()
-                .contentType(ContentType.JSON)
-                .get(URL + "api/users")
+                .get( "api/users")
                 .then().log().all()
                 .extract().body().jsonPath().getList("data", UserData.class);
         Assert.assertTrue(allUsers.stream().allMatch(u -> u.getEmail().endsWith("@reqres.in")));
@@ -61,10 +61,10 @@ public class ReqresTest {
 
     @Test
     public void avatarContainsId() {
+        Specification.installSpecification(Specification.reqSpec(URL), Specification.respSpec200OK());
         List<UserData> allUsers = given()
                 .when()
-                .contentType(ContentType.JSON)
-                .get(URL + "api/users")
+                .get("api/users")
                 .then().log().all()
                 .extract().body().jsonPath().getList("data", UserData.class);
 
