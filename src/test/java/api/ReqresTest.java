@@ -87,6 +87,8 @@ public class ReqresTest {
                 .post("api/register")
                 .then().log().all()
                 .extract().as(SuccessReg.class);
+        Assert.assertNotNull(successReg.getId());
+        Assert.assertNotNull(successReg.getToken());
 
         Assert.assertEquals(id, successReg.getId());
         Assert.assertEquals(token, successReg.getToken());
