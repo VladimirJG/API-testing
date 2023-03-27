@@ -16,10 +16,10 @@ public class ReqresTest {
 
     @Test
     public void getAllUsers() {
+        Specification.installSpecification(Specification.reqSpec(URL), Specification.respSpec200OK());
         List<UserData> allUsers = given()
                 .when()
-                .contentType(ContentType.JSON)
-                .get(URL + "api/users")
+                .get("api/users")
                 .then().log().all()
                 .extract().body().jsonPath().getList("data", UserData.class);
     }
