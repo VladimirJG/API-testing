@@ -56,6 +56,23 @@ public class ReqresTest {
                 .get(URL + "api/users")
                 .then().log().all()
                 .extract().body().jsonPath().getList("data", UserData.class);
-        Assert.assertTrue(allUsers.stream().allMatch(u->u.getEmail().endsWith("@reqres.in")));
+        Assert.assertTrue(allUsers.stream().allMatch(u -> u.getEmail().endsWith("@reqres.in")));
+    }
+
+    @Test
+    public void avatarContainsId() {
+        List<UserData> allUsers = given()
+                .when()
+                .contentType(ContentType.JSON)
+                .get(URL + "api/users")
+                .then().log().all()
+                .extract().body().jsonPath().getList("data", UserData.class);
+
+        List<String> avatars = allUsers.stream().map(UserData::getAvatar).toList();
+        List<String> ids = allUsers.stream().map(z -> z.getId().toString()).toList();
+
+        for (int i = 0; i < avatars.size(); i++) {
+            Assert.assertTrue(avatars.get(i).contains(ids.get(i)));
+        }
     }
 }
