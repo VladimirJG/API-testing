@@ -118,4 +118,11 @@ public class ReqresTest {
         List<Integer> years = new ArrayList<>(pantoneList.stream().map(Pantone::getYear).sorted().toList());
         Assert.assertEquals(years, years.stream().sorted().toList());
     }
+
+    @Test
+    public void delete() {
+        Specification.installSpecification(Specification.reqSpec(URL), Specification.respSpecUnique(204));
+       given().when().delete("api/users/2")
+               .then().log().all();
+    }
 }
