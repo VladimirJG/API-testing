@@ -4,6 +4,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 
+import java.time.Clock;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -122,7 +123,20 @@ public class ReqresTest {
     @Test
     public void delete() {
         Specification.installSpecification(Specification.reqSpec(URL), Specification.respSpecUnique(204));
-       given().when().delete("api/users/2")
-               .then().log().all();
+        given().when().delete("api/users/2")
+                .then().log().all();
+    }
+
+    @Test
+    public void compareDate() {
+        Specification.installSpecification(Specification.reqSpec(URL), Specification.respSpec200OK());
+        UserTime userTime = new UserTime("morpheus", "zion resident");
+        UserTimeResponse response = given().body(userTime).when()
+                .put("api/users/2")
+                .then().log().all()
+                .extract().as(UserTimeResponse.class);
+        String regex = "\\..*$";
+        String currentTime = Clock.systemUTC().instant().toString().replaceAll(regex,"");
+        Assert.assertEquals(currentTime, response.getUpdatedAt().replaceAll(regex,""));
     }
 }
