@@ -5,6 +5,7 @@ import org.testng.annotations.Test;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -95,7 +96,7 @@ public class ReqresTest {
     }
 
     @Test
-    public void unSuccessRegTest(){
+    public void unSuccessRegTest() {
         Specification.installSpecification(Specification.reqSpec(URL), Specification.respSpecError400());
         Register user = new Register("sydney@fife", "");
         UnSuccessReg unSuccessReg = given()
@@ -103,6 +104,18 @@ public class ReqresTest {
                 .post("api/register")
                 .then().log().all()
                 .extract().as(UnSuccessReg.class);
-        Assert.assertEquals(unSuccessReg.getError(),"Missing password");
+        Assert.assertEquals(unSuccessReg.getError(), "Missing password");
+    }
+
+    @Test
+    public void sortedYearsTest() {
+        Specification.installSpecification(Specification.reqSpec(URL), Specification.respSpec200OK());
+        List<Pantone> pantoneList = given()
+                .when()
+                .get("api/unknown")
+                .then().log().all()
+                .extract().body().jsonPath().getList("data", Pantone.class);
+        List<Integer> years = new ArrayList<>(pantoneList.stream().map(Pantone::getYear).sorted().toList());
+        Assert.assertEquals(years, years.stream().sorted().toList());
     }
 }
